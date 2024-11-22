@@ -1,4 +1,4 @@
-package com.dosol.qwer.dto;
+package com.dosol.qwer.dto.user;
 
 import lombok.*;
 

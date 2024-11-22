@@ -1,6 +1,6 @@
-package com.dosol.qwer.repository;
+package com.dosol.qwer.repository.user;
 
-import com.dosol.qwer.domain.User;
+import com.dosol.qwer.domain.user.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

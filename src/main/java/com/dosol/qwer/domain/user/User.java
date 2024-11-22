@@ -1,5 +1,6 @@
-package com.dosol.qwer.domain;
+package com.dosol.qwer.domain.user;
 
+import com.dosol.qwer.domain.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

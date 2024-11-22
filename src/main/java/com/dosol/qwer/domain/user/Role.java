@@ -1,4 +1,4 @@
-package com.dosol.qwer.domain;
+package com.dosol.qwer.domain.user;
 
 public enum Role {
     USER, ADMIN

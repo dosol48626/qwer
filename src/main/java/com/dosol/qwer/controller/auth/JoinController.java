@@ -1,4 +1,4 @@
-package com.dosol.qwer.controller;
+package com.dosol.qwer.controller.auth;
 
 import com.dosol.qwer.dto.user.UserDTO;
 import com.dosol.qwer.service.user.UserService;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-
 public class JoinController {
 
     private final UserService userService;
