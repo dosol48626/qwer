@@ -21,7 +21,7 @@ public class Board extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardNum;
-
+//
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_num", nullable = false)
     private User user;
