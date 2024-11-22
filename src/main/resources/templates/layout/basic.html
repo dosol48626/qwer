@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Main Layout</title>
+  <link href="/css/main.css" type="text/css" rel="stylesheet">
+  <link href="/css/common.css" type="text/css" rel="stylesheet">
+
+  <script>
+
+  </script>
+
+</head>
+
+<body>
+
+  <div class="container">
+<!--    <input type="hidden" name="size" th:value="${pageRequestDTO.size}">-->
+<!--    <input type="hidden" name="pageType" th:value="${pageRequestDTO.pageType}">-->
+
+    <div class="main_top">
+      <div class="head_logo">
+        <a href="/">
+            <img src="/img/common/project_head_Logo_2.png" alt="로고" width="150" height="30" >
+        </a>
+      </div>
+
+      <div>
+        <ul class="top_menu">
+          <li><a href="/notice/list">Notice</a></li>
+          <li><a href="/wise/random">Wise</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="icon_sidebar">
+      <div class="sidebar">
+        <div class="sidebar-btn">
+          <img class="top-menu" src="/img/common/projcect_sidebar_menu.png" width="40" height="40">
+        </div>
+
+        <div class="sidebar-content">
+
+          <div class="user-info">
+
+            <img class="user-img" th:src="@{'/upload/' + ${profileImage.filename}}" width="60" height="60">
+
+            <div class="userbox">
+              <div class="username">
+                  <a th:text="${user.username}"></a>
+              </div>
+
+            </div>
+            <div class="userbox">
+              <div class="user-setting">
+                <a href="/user/mypage">
+                  <img class="topmenu-icon" src="/img/common/projcect_sidebar_setting.png" width="30" height="30">
+                </a>
+              </div>
+            </div>
+
+            <div class="userbox">
+              <div class="user-logout">
+                <a href="/user/logout">
+                  logout
+                </a>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="sidemenu">
+            <ul class="menu">
+              <li>
+                <a href="/">
+                  <div class="menu-icon" >
+                    <img class="menu-icon" src="/img/common/projcect_sidebar_home.png" width="40" height="40">
+                  </div>
+                  <div class="menu-text">Home</div>
+                </a>
+              </li>
+              <li>
+                <a href="#">
+                  <div class="menu-icon" >
+                    <img class="menu-icon" src="/img/common/projcect_sidebar_timer.png" width="40" height="40">
+                  </div>
+                  <div class="menu-text">Timer</div>
+                </a>
+              </li>
+                <li>
+                    <a href="/notes/list">
+                        <div class="menu-icon" >
+                            <img class="menu-icon" src="/img/common/projcect_sidebar_notes.png" width="40" height="40">
+                        </div>
+                        <div class="menu-text">Notes</div>
+                    </a>
+                </li>
+
+                <li>
+                    <a href="/board/list">
+                        <div class="menu-icon" >
+                            <img class="menu-icon" src="/img/common/projcect_sidebar_community.png" width="40" height="40">
+                        </div>
+                        <div class="menu-text">community</div>
+                    </a>
+                </li>
+
+              <li>
+                <a href="/todo/list?pageType=list">
+                  <div class="menu-icon" >
+                    <img class="menu-icon" src="/img/common/projcect_sidebar_todo.png" width="40" height="40">
+                  </div>
+                  <div class="menu-text">Todo List</div>
+                </a>
+
+                <ul class="submenu">
+
+<!--                  <a href="#" onclick="openSearchPopup()">-->
+<!--                    <button type="button" class=" btn_search">-->
+<!--                      <img class="search_btn" src="/img/common/projcect_sidebar_search.png" width="35" height="35" >-->
+<!--                      <div class="search_btn_text">search</div>-->
+<!--                    </button>-->
+<!--                  </a>-->
+
+                  <li>
+                    <img class="menu-icon2" src="/img/common/projcect_sidebar_smallopen.png" width="20" height="20">
+                    <a href="/todo/list?pageType=today">today</a>
+                  </li>
+                  <li>
+                    <img class="menu-icon2" src="/img/common/projcect_sidebar_smallopen.png" width="20" height="20">
+                    <a href="/todo/list?pageType=upcoming">upcoming</a>
+                  </li>
+                  <li>
+                    <img class="menu-icon2" src="/img/common/projcect_sidebar_smallopen.png" width="20" height="20">
+                    <a href="/todo/list?pageType=past">past</a>
+                  </li>
+                  <li>
+                    <img class="menu-icon2" src="/img/common/projcect_sidebar_smallopen.png" width="20" height="20">
+                    <a href="/todo/list?pageType=completed">completed</a>
+                  </li>
+                </ul>
+              </li>
+
+
+
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="content-area" layout:fragment="content">
+      <!-- 이 부분에 각 페이지의 콘텐츠가 들어갑니다 -->
+    </div>
+  </div>
+
+  <div layout:fragment="scripts"></div>
+
+
+</body>
+</html>
