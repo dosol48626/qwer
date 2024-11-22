@@ -16,7 +16,7 @@ public class BoardDTO {
 
     private Long boardNum;
 
-    private String username;
+    private String nickname;
 
     private String title;
 
@@ -24,6 +24,6 @@ public class BoardDTO {
 
     private int visitCount;
 
-    private LocalDateTime createTime;
-    private LocalDateTime updateTime;
+    private String createTime;
+    private String updateTime;
 }

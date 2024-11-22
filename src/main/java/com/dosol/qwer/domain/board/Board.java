@@ -14,16 +14,16 @@ import java.util.Set;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Setter
 @Getter
+@Setter
 public class Board extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardNum;
 
-    // 수정된 부분: CascadeType.PERSIST 추가
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_num", nullable = false)
     private User user;
 
     @Column(nullable = false, length = 100)
@@ -44,6 +44,4 @@ public class Board extends BaseEntity {
         this.title = title;
         this.content = content;
     }
-
-
 }
