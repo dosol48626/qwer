@@ -29,4 +29,7 @@ public class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role; // 권한 (USER, ADMIN)
+
+    @Column(nullable = false)
+    private String profileImagePath; // 프로필 이미지 파일 경로
 }

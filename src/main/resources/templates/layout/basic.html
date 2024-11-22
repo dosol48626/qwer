@@ -2,35 +2,48 @@
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Main Layout</title>
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Main Layout</title>
+    <style>
+        /* 프로필 이미지 스타일 */
+        .user-profile img {
+            width: 100px; /* 가로 크기 설정 */
+            height: 100px; /* 세로 크기 설정 */
+            border-radius: 50%; /* 원형으로 자르기 */
+        }
+    </style>
 </head>
 
 <body>
 
-  <div class="container">
+<div class="container">
 
     <div class="icon_sidebar">
 
         <div class="sidebar-content">
             <div class="userbox">
-              <div class="username">
-                  <p th:if="${nickname != null}" th:text="'환영합니다, ' + ${nickname} + '님!'"></p>
-                  <p th:if="${nickname == null}">로그인되지 않았습니다.</p>
-              </div>
+                <!-- 프로필 이미지 표시 -->
+                <div class="user-profile">
+                    <img th:src="@{'/upload/profile_images/' + ${profileImagePath}}"
+                         alt="Profile Image"
+                         th:if="${profileImagePath != null}" />
+                </div>
+                <!-- 닉네임 표시 -->
+                <div class="username">
+                    <p th:if="${nickname != null}" th:text="'환영합니다, ' + ${nickname} + '님!'"></p>
+                    <p th:if="${nickname == null}">로그인되지 않았습니다.</p>
+                </div>
             </div>
-          </div>
-      </div>
+        </div>
 
     </div>
 
     <div class="content-area" layout:fragment="content">
-      <!-- 이 부분에 각 페이지의 콘텐츠가 들어갑니다 -->
+        <!-- 이 부분에 각 페이지의 콘텐츠가 들어갑니다 -->
     </div>
-  </div>
+</div>
 
-  <div layout:fragment="scripts"></div>
+<div layout:fragment="scripts"></div>
 </body>
 </html>

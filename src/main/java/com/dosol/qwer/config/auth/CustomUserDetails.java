@@ -35,6 +35,10 @@ public class CustomUserDetails implements UserDetails {
         return user.getNickname(); // User 엔터티의 닉네임 반환
     }
 
+    public String getProfileImagePath() {
+        return user.getProfileImagePath(); // User 엔터티의 프로필 이미지 경로 반환
+    }
+
     @Override
     public boolean isAccountNonExpired() {
         return true;
