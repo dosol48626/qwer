@@ -27,17 +27,13 @@ public class BoardController {
      * 게시글 목록 페이지
      */
     @GetMapping("/list")
-    public String list(
-            PageRequestDTO pageRequestDTO,
-            Model model,
-            @AuthenticationPrincipal UserDetails userDetails) {
+    public String list(PageRequestDTO pageRequestDTO, Model model,
+                       @AuthenticationPrincipal UserDetails userDetails) {
 
-        // 닉네임 가져오기
-        String nickname = userService.getUserNickname((CustomUserDetails) userDetails);
-        model.addAttribute("nickname", nickname);
+        // 닉네임과 게시글 데이터 추가
+        model.addAttribute("nickname", userService.getUserNickname((CustomUserDetails) userDetails));
+        model.addAttribute("responseDTO", boardService.list(pageRequestDTO));
 
-        PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
-        model.addAttribute("responseDTO", responseDTO);
         return "board/list";
     }
 

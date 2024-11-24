@@ -10,6 +10,19 @@
     <p th:if="${nickname == null}">로그인되지 않았습니다.</p>
 </div>
 
+<!-- 검색 기능 -->
+<div>
+    <form th:action="@{/board/list}" method="get">
+        <input type="text" name="keyword" th:value="${keyword}" placeholder="검색어를 입력하세요">
+        <select name="type">
+            <option value="title" th:selected="${type == 'title'}">제목</option>
+            <option value="content" th:selected="${type == 'content'}">내용</option>
+            <option value="nickname" th:selected="${type == 'nickname'}">작성자</option>
+        </select>
+        <button type="submit">검색</button>
+    </form>
+</div>
+
 <!-- 게시판 목록 -->
 <h1>게시판 목록</h1>
 <table border="1">
@@ -29,11 +42,24 @@
             <a th:href="@{'/board/read?boardNum=' + ${board.boardNum}}" th:text="${board.title}"></a>
         </td>
         <td th:text="${board.nickname}"></td>
-        <th th:text="${board.visitCount}"></th>
-        <td th:text="${board.createTime}"></td> <!-- createTime 출력 -->
+        <td th:text="${board.visitCount}"></td>
+        <td th:text="${board.createTime}"></td>
+    </tr>
+    <tr th:if="${responseDTO.dtoList.empty}">
+        <td colspan="5">검색 결과가 없습니다.</td>
     </tr>
     </tbody>
 </table>
+
+<!-- 페이지네이션 -->
+<div>
+    <a th:if="${responseDTO.prev}" th:href="@{'/board/list?page=' + ${responseDTO.startPage - 1} + '&keyword=' + ${keyword} + '&type=' + ${type}}">이전</a>
+    <span th:each="page : ${#numbers.sequence(responseDTO.startPage, responseDTO.endPage)}">
+        <a th:if="${page != responseDTO.page}" th:href="@{'/board/list?page=' + ${page} + '&keyword=' + ${keyword} + '&type=' + ${type}}" th:text="${page}"></a>
+        <span th:if="${page == responseDTO.page}" th:text="${page}"></span>
+    </span>
+    <a th:if="${responseDTO.next}" th:href="@{'/board/list?page=' + ${responseDTO.endPage + 1} + '&keyword=' + ${keyword} + '&type=' + ${type}}">다음</a>
+</div>
 
 <a href="/board/register">게시글 작성</a>
 </body>
