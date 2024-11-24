@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>게시글 상세</title>
+</head>
+<body>
+<!-- 유저 정보 -->
+<div>
+    <p th:if="${nickname != null}" th:text="'환영합니다, ' + ${nickname} + '님!'"></p>
+    <p th:if="${nickname == null}">로그인되지 않았습니다.</p>
+</div>
+
+<!-- 게시글 상세 -->
+<h1>게시글 상세</h1>
+<p><strong>번호:</strong> <span th:text="${boardDTO.boardNum}"></span></p>
+<p><strong>제목:</strong> <span th:text="${boardDTO.title}"></span></p>
+<p><strong>작성자:</strong> <span th:text="${boardDTO.nickname}"></span></p>
+<p><strong>작성일:</strong> <span th:text="${boardDTO.createTime}"></span></p>
+<p><strong>수정일:</strong> <span th:text="${boardDTO.updateTime}"></span></p>
+<p><strong>내용:</strong></p>
+<p th:text="${boardDTO.content}"></p>
+
+<a th:href="@{'/board/modify?boardNum=' + ${boardDTO.boardNum}}">수정</a>
+<a th:href="@{'/board/remove?boardNum=' + ${boardDTO.boardNum}}">삭제</a>
+<a href="/board/list">목록으로 돌아가기</a>
+</body>
+</html>

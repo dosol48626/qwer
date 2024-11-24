@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>게시글 작성</title>
+</head>
+<body>
+<!-- 유저 정보 -->
+<div>
+  <p th:if="${nickname != null}" th:text="'환영합니다, ' + ${nickname} + '님!'"></p>
+  <p th:if="${nickname == null}">로그인되지 않았습니다.</p>
+</div>
+
+<!-- 게시글 작성 -->
+<h1>게시글 작성</h1>
+<form action="/board/register" method="post">
+  <label for="title">제목:</label>
+  <input type="text" id="title" name="title" required><br>
+
+  <label for="content">내용:</label><br>
+  <textarea id="content" name="content" rows="10" cols="50" required></textarea><br>
+
+  <button type="submit">등록</button>
+</form>
+<a href="/board/list">목록으로 돌아가기</a>
+</body>
+</html>
