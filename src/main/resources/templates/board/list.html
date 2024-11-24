@@ -1,66 +1,108 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
 <head>
-    <title>게시판 목록</title>
+    <meta charset="UTF-8">
+    <title>Board List</title>
 </head>
+
 <body>
-<!-- 유저 정보 -->
-<div>
-    <p th:if="${nickname != null}" th:text="'환영합니다, ' + ${nickname} + '님!'"></p>
-    <p th:if="${nickname == null}">로그인되지 않았습니다.</p>
+<div class="container" layout:fragment="content">
+    <div class="container2">
+        <div class="board_main">
+            <div class="board_main_box">
+                <div class="board_maintext">
+                    <p class="maintext1">자유 게시판</p>
+                    <p class="maintext2">의견, 정보, 질문 등을 자유롭게 게시하여 다른 사용자들과 소통해 보세요</p>
+                    <div class="board_main_btn">
+                        <a th:href="@{/board/register}" >
+                            <button type="button" class="custom-btn btn_register">글 등록하기</button>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="board_main_box2">
+                    <!-- 검색 폼 -->
+
+                    <form action="/board/list" method="get" th:action="@{/board/list}" th:object="${pageRequestDTO}">
+                        <div class="search_box">
+                            <div class="input-group">
+                                <select name="type" class="form-select" th:value="${pageRequestDTO.type}">
+                                    <option value="">검색 조건</option>
+                                    <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+                                    <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+                                    <option value="w" th:selected="${pageRequestDTO.type == 'w'}">작성자</option>
+                                    <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목 + 내용</option>
+                                    <option value="tcw" th:selected="${pageRequestDTO.type == 'tcw'}">제목 + 내용 + 작성자</option>
+                                </select>
+                                <input type="text" class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="검색어를 입력하세요">
+                                <button class="btn btn-outline-secondary searchBtn" type="submit">검색</button>
+                                <button class="btn btn-outline-secondary clearBtn" type="button">초기화</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="board_main_box3">
+                    <table class="board-table">
+                        <thead>
+                        <tr class="table_head">
+                            <th style="width: 80px; text-align: center">게시물 번호</th>
+                            <th style="width: 150px;">작성자</th>
+                            <th>제목</th>
+                            <th style="width: 80px; text-align: center"> 조회수</th>
+                            <th style="width: 150px;">등록 날짜</th>
+                            <th style="width: 150px;">수정 날짜</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <!-- 게시글 목록 반복 -->
+                        <tr th:each="board : ${responseDTO.dtoList}">
+                            <td style="text-align: center" th:text="${board.boardNum}">1</td>
+                            <td th:text="${board.nickname}">작성자</td>
+                            <td>
+                                <a th:href="@{/board/read(boardNum=${board.boardNum})}" th:text="${board.title}">게시글 제목</a>
+                            </td>
+                            <td style="text-align: center" th:text="${board.visitCount}">0</td>
+                            <td style="text-align: center" th:text="${board.createTime}">0</td>
+                            <td style="text-align: center" th:text="${board.updateTime}">0</td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 페이징 처리 -->
+                <div class="board_paging">
+                    <div class="pagination_box">
+                        <ul class="pagination flex-wrap">
+                            <!-- 이전 페이지 버튼 -->
+                            <li class="page-item" th:if="${responseDTO.prev}">
+                                <a class="page-link" th:href="@{/board/list(page=${responseDTO.start - 1})}">이전</a>
+                            </li>
+                            <!-- 페이지 번호 동적 생성 -->
+                            <th:block th:each="i : ${#numbers.sequence(responseDTO.start, responseDTO.end)}">
+                                <li th:classappend="${responseDTO.page == i} ? 'active' : ''" class="page-item">
+                                    <a class="page-link" th:href="@{/board/list(page=${i})}" th:text="${i}">1</a>
+                                </li>
+                            </th:block>
+                            <!-- 다음 페이지 버튼 -->
+                            <li class="page-item" th:if="${responseDTO.next}">
+                                <a class="page-link" th:href="@{/board/list(page=${responseDTO.end + 1})}">다음</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+
+
+            </div>
+
+            <div class=""></div>
+        </div>
+
+
+    </div>
 </div>
-
-<!-- 검색 기능 -->
-<div>
-    <form th:action="@{/board/list}" method="get">
-        <input type="text" name="keyword" th:value="${keyword}" placeholder="검색어를 입력하세요">
-        <select name="type">
-            <option value="title" th:selected="${type == 'title'}">제목</option>
-            <option value="content" th:selected="${type == 'content'}">내용</option>
-            <option value="nickname" th:selected="${type == 'nickname'}">작성자</option>
-        </select>
-        <button type="submit">검색</button>
-    </form>
-</div>
-
-<!-- 게시판 목록 -->
-<h1>게시판 목록</h1>
-<table border="1">
-    <thead>
-    <tr>
-        <th>번호</th>
-        <th>제목</th>
-        <th>작성자</th>
-        <th>조회수</th>
-        <th>작성일</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="board : ${responseDTO.dtoList}">
-        <td th:text="${board.boardNum}"></td>
-        <td>
-            <a th:href="@{'/board/read?boardNum=' + ${board.boardNum}}" th:text="${board.title}"></a>
-        </td>
-        <td th:text="${board.nickname}"></td>
-        <td th:text="${board.visitCount}"></td>
-        <td th:text="${board.createTime}"></td>
-    </tr>
-    <tr th:if="${responseDTO.dtoList.empty}">
-        <td colspan="5">검색 결과가 없습니다.</td>
-    </tr>
-    </tbody>
-</table>
-
-<!-- 페이지네이션 -->
-<div>
-    <a th:if="${responseDTO.prev}" th:href="@{'/board/list?page=' + ${responseDTO.startPage - 1} + '&keyword=' + ${keyword} + '&type=' + ${type}}">이전</a>
-    <span th:each="page : ${#numbers.sequence(responseDTO.startPage, responseDTO.endPage)}">
-        <a th:if="${page != responseDTO.page}" th:href="@{'/board/list?page=' + ${page} + '&keyword=' + ${keyword} + '&type=' + ${type}}" th:text="${page}"></a>
-        <span th:if="${page == responseDTO.page}" th:text="${page}"></span>
-    </span>
-    <a th:if="${responseDTO.next}" th:href="@{'/board/list?page=' + ${responseDTO.endPage + 1} + '&keyword=' + ${keyword} + '&type=' + ${type}}">다음</a>
-</div>
-
-<a href="/board/register">게시글 작성</a>
 </body>
+
 </html>

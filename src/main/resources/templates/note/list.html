@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+<head>
+  <meta charset="UTF-8">
+  <title>Note List</title>
+</head>
+<body>
+<div class="container" layout:fragment="content">
+  <h1>Note List</h1>
+  <a th:href="@{/note/register}">
+    <button type="button">Create New Note</button>
+  </a>
+
+  <!-- 검색 폼 -->
+  <form action="/note/list" method="get" th:action="@{/note/list}" th:object="${pageRequestDTO}">
+    <div class="search_box">
+      <div class="input-group">
+        <select name="type" class="form-select" th:value="${pageRequestDTO.type}">
+          <option value="">검색 조건</option>
+          <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+          <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+          <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목 + 내용</option>
+        </select>
+        <input type="text" class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="검색어를 입력하세요">
+        <button class="btn btn-outline-secondary searchBtn" type="submit">검색</button>
+        <button class="btn btn-outline-secondary clearBtn" type="button">초기화</button>
+      </div>
+    </div>
+  </form>
+
+  <!-- 노트 테이블 -->
+  <table border="1">
+    <thead>
+    <tr>
+      <th>번호</th>
+      <th>제목</th>
+      <th>내용</th>
+      <th>작성일</th>
+      <th>수정일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="note : ${responseDTO.dtoList}">
+      <td th:text="${note.noteNum}">1</td>
+      <td>
+        <a th:href="@{/note/read(noteNum=${note.noteNum})}" th:text="${note.title}">Note Title</a>
+      </td>
+      <td th:text="${note.content}">Content Preview</td>
+      <td th:text="${note.createTime}">2024-01-01</td>
+      <td th:text="${note.updateTime}">2024-01-02</td>
+    </tr>
+    </tbody>
+  </table>
+
+  <!-- 페이징 처리 -->
+  <div class="board_paging">
+    <div class="pagination_box">
+      <ul class="pagination flex-wrap">
+        <!-- 이전 페이지 버튼 -->
+        <li class="page-item" th:if="${responseDTO.prev}">
+          <a class="page-link" th:href="@{/note/list(page=${responseDTO.start - 1})}">이전</a>
+        </li>
+        <!-- 페이지 번호 동적 생성 -->
+        <th:block th:each="i : ${#numbers.sequence(responseDTO.start, responseDTO.end)}">
+          <li th:classappend="${responseDTO.page == i} ? 'active' : ''" class="page-item">
+            <a class="page-link" th:href="@{/note/list(page=${i})}" th:text="${i}">1</a>
+          </li>
+        </th:block>
+        <!-- 다음 페이지 버튼 -->
+        <li class="page-item" th:if="${responseDTO.next}">
+          <a class="page-link" th:href="@{/note/list(page=${responseDTO.end + 1})}">다음</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>
+</body>
+</html>
