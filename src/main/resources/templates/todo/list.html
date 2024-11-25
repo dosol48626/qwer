@@ -12,14 +12,14 @@
     <button type="button">Create New TODO</button>
 </a>
 
-<form action="/note/list" method="get" th:action="@{/note/list}" th:object="${pageRequestDTO}">
+<form action="/todo/list" method="get" th:action="@{/todo/list}" th:object="${pageRequestDTO}">
     <div class="search_box">
         <div class="input-group">
             <select name="type" class="form-select" th:value="${pageRequestDTO.type}">
                 <option value="">검색 조건</option>
                 <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
-                <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
-                <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목 + 내용</option>
+                <option value="c" th:selected="${pageRequestDTO.type == 'd'}">내용</option>
+                <option value="tc" th:selected="${pageRequestDTO.type == 'td'}">제목 + 내용</option>
             </select>
             <input type="text" class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="검색어를 입력하세요">
             <button class="btn btn-outline-secondary searchBtn" type="submit">검색</button>
