@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>TODO Details</title>
+</head>
+<body>
+<h1>TODO Details</h1>
+<p><strong>번호:</strong> <span th:text="${todoDTO.todoNum}"></span></p>
+<p><strong>제목:</strong> <span th:text="${todoDTO.title}"></span></p>
+<p><strong>내용:</strong> <span th:text="${todoDTO.description}"></span></p>
+<p><strong>완료 여부:</strong> <span th:text="${todoDTO.complete ? '완료' : '미완료'}"></span></p>
+<p><strong>마감일:</strong> <span th:text="${todoDTO.dueDate}"></span></p>
+<p><strong>작성일:</strong> <span th:text="${todoDTO.createTime}"></span></p>
+<p><strong>수정일:</strong> <span th:text="${todoDTO.updateTime}"></span></p>
+
+<a th:href="@{/todo/modify(todoNum=${todoDTO.todoNum})}">
+  <button type="button">수정</button>
+</a>
+<a th:href="@{/todo/remove(todoNum=${todoDTO.todoNum})}">
+  <button type="button">삭제</button>
+</a>
+<a th:href="@{/todo/list}">목록으로 돌아가기</a>
+</body>
+</html>

@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Register TODO</title>
+</head>
+<body>
+<h1>Register TODO</h1>
+<form action="/todo/register" method="post">
+    <label for="title">제목:</label>
+    <input type="text" id="title" name="title" required>
+    <br>
+    <label for="description">내용:</label>
+    <textarea id="description" name="description" rows="5" cols="30" required></textarea>
+    <br>
+    <label for="dueDate">마감일:</label>
+    <input type="date" id="dueDate" name="dueDate">
+    <br>
+    <button type="submit">등록</button>
+</form>
+<a th:href="@{/todo/list}">목록으로 돌아가기</a>
+</body>
+</html>

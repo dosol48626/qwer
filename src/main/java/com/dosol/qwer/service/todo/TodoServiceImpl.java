@@ -34,20 +34,30 @@ public class TodoServiceImpl implements TodoService {
     // 로그인된 사용자의 목록 조회
     @Override
     public PageResponseDTO<TodoDTO> list(PageRequestDTO pageRequestDTO) {
+        // 현재 로그인된 사용자 정보 가져오기
         User currentUser = getCurrentUser();
 
-        String[] types = pageRequestDTO.getTypes();
-        String keyword = pageRequestDTO.getKeyword();
-        String pageType = pageRequestDTO.getPageType();
-        Pageable pageable = pageRequestDTO.getPageable("todoNum");
+        // 검색 조건 및 페이징 정보 추출
+        String[] types = pageRequestDTO.getTypes();       // 검색 조건
+        String keyword = pageRequestDTO.getKeyword();     // 검색 키워드
+        String pageType = pageRequestDTO.getPageType();   // 페이지 타입 (list, today 등)
+        Pageable pageable = pageRequestDTO.getPageable("todoNum"); // 정렬 기준 "todoNum"
 
-        // 로그인된 사용자의 Todo 검색
-        Page<Todo> result = todoRepository.searchAll(types, keyword, pageable, pageType, currentUser.getUserNum());
+        // 본인의 Todo를 검색 조건과 함께 조회
+        Page<Todo> result = todoRepository.searchAll(
+                types,
+                keyword,
+                pageable,
+                pageRequestDTO.getPageType(),
+                currentUser.getNickname() // userNum 대신 nickname 전달
+        );
 
+        // 엔티티 -> DTO 변환
         List<TodoDTO> dtoList = result.getContent().stream()
                 .map(todo -> modelMapper.map(todo, TodoDTO.class))
                 .collect(Collectors.toList());
 
+        // PageResponseDTO 생성
         return PageResponseDTO.<TodoDTO>withAll()
                 .pageRequestDTO(pageRequestDTO)
                 .dtoList(dtoList)

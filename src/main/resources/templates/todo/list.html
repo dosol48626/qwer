@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>TODO List</title>
+</head>
+<body>
+<h1>TODO List</h1>
+
+<!-- 등록 버튼 -->
+<a th:href="@{/todo/register}">
+    <button type="button">Create New TODO</button>
+</a>
+
+<form action="/note/list" method="get" th:action="@{/note/list}" th:object="${pageRequestDTO}">
+    <div class="search_box">
+        <div class="input-group">
+            <select name="type" class="form-select" th:value="${pageRequestDTO.type}">
+                <option value="">검색 조건</option>
+                <option value="t" th:selected="${pageRequestDTO.type == 't'}">제목</option>
+                <option value="c" th:selected="${pageRequestDTO.type == 'c'}">내용</option>
+                <option value="tc" th:selected="${pageRequestDTO.type == 'tc'}">제목 + 내용</option>
+            </select>
+            <input type="text" class="form-control" name="keyword" th:value="${pageRequestDTO.keyword}" placeholder="검색어를 입력하세요">
+            <button class="btn btn-outline-secondary searchBtn" type="submit">검색</button>
+            <button class="btn btn-outline-secondary clearBtn" type="button">초기화</button>
+        </div>
+    </div>
+</form>
+
+<!-- 목록 테이블 -->
+<table border="1">
+    <thead>
+    <tr>
+        <th>번호</th>
+        <th>제목</th>
+        <th>내용</th>
+        <th>완료 여부</th>
+        <th>마감일</th>
+        <th>작성일</th>
+        <th>수정일</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="todo : ${responseDTO.dtoList}">
+        <td th:text="${todo.todoNum}"></td>
+        <td>
+            <a th:href="@{/todo/read(todoNum=${todo.todoNum})}" th:text="${todo.title}"></a>
+        </td>
+        <td th:text="${todo.description}"></td>
+        <td th:text="${todo.complete ? '완료' : '미완료'}"></td>
+        <td th:text="${todo.dueDate}"></td>
+        <td th:text="${todo.createTime}"></td>
+        <td th:text="${todo.updateTime}"></td>
+    </tr>
+    </tbody>
+</table>
+
+<!-- 페이징 -->
+<div>
+    <ul>
+        <li th:if="${responseDTO.prev}">
+            <a th:href="@{/todo/list(page=${responseDTO.start - 1})}">이전</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(responseDTO.start, responseDTO.end)}"
+            th:classappend="${responseDTO.page == i} ? 'active'">
+            <a th:href="@{/todo/list(page=${i})}" th:text="${i}"></a>
+        </li>
+        <li th:if="${responseDTO.next}">
+            <a th:href="@{/todo/list(page=${responseDTO.end + 1})}">다음</a>
+        </li>
+    </ul>
+</div>
+</body>
+</html>

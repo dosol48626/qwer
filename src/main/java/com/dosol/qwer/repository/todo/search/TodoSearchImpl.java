@@ -19,59 +19,58 @@ public class TodoSearchImpl extends QuerydslRepositorySupport implements TodoSea
     }
 
     @Override
-    public Page<Todo> searchAll(String[] types, String keyword, Pageable pageable, String pageType, Long userNum) {
-        QTodo todo = QTodo.todo;
+    public Page<Todo> searchAll(String[] types, String keyword, Pageable pageable, String pageType, String nickname) {
+        QTodo todo = QTodo.todo; // QueryDSL을 사용하는 Todo 객체
         JPQLQuery<Todo> query = from(todo);
 
-        // keyword가 null인지 확인
-        if (types != null && types.length > 0) {
+        // 1. 로그인된 사용자 필터링 (nickname 기준)
+        query.where(todo.user.nickname.eq(nickname)); // 로그인된 사용자 필터링 추가
+
+        // 2. 검색 조건 처리
+        if (types != null && types.length > 0 && keyword != null) { // types와 keyword가 null이 아닐 때만 처리
             BooleanBuilder builder = new BooleanBuilder();
             for (String type : types) {
                 switch (type) {
                     case "t":
-                        if (keyword != null) { // keyword가 null이 아닐 때만 처리
-                            builder.or(todo.title.contains(keyword));
-                        }
+                        builder.or(todo.title.contains(keyword));
                         break;
                     case "d":
-                        if (keyword != null) { // keyword가 null이 아닐 때만 처리
-                            builder.or(todo.description.contains(keyword));
-                        }
+                        builder.or(todo.description.contains(keyword));
                         break;
                 }
             }
-            query.where(builder);
+            query.where(builder); // 검색 조건 추가
         }
 
-        // pageType에 따른 조건 추가
+        // 3. pageType 처리
         if (pageType != null) { // pageType이 null이 아닐 때만 처리
             switch (pageType) {
                 case "past":
-                    query.where(todo.dueDate.lt(LocalDate.now())); // 오늘 이전의 dueDate를 가진 Todo
+                    query.where(todo.dueDate.lt(LocalDate.now())); // 오늘 이전 일정
                     break;
                 case "today":
-                    query.where(todo.dueDate.eq(LocalDate.now()));
+                    query.where(todo.dueDate.eq(LocalDate.now())); // 오늘 일정
                     break;
                 case "upcoming":
-                    query.where(todo.dueDate.gt(LocalDate.now()).or(todo.dueDate.isNull())); // dueDate가 null인 경우 포함
+                    query.where(todo.dueDate.gt(LocalDate.now()).or(todo.dueDate.isNull())); // 미래 일정
                     break;
-
                 case "completed":
-                    query.where(todo.complete.eq(true)); // complete가 true인 Todo 항목만
+                    query.where(todo.complete.eq(true)); // 완료된 일정
                     break;
-
                 case "list":
                     // 기본적으로 모든 Todo 항목
-                    break; // 이 경우는 추가적인 조건이 필요 없음
+                    break; // 추가 조건 없음
             }
         }
 
-        query.where(todo.todoNum.gt(0L));
-        this.getQuerydsl().applyPagination(pageable, query);
-        List<Todo> list = query.fetch();
-        long total = query.fetchCount();
-        return new PageImpl<>(list, pageable, total);
+        // 4. 페이징 및 결과 조회
+        this.getQuerydsl().applyPagination(pageable, query); // 페이징 적용
+        List<Todo> list = query.fetch(); // 실제 데이터 조회
+        long total = query.fetchCount(); // 총 개수 계산
+
+        return new PageImpl<>(list, pageable, total); // 페이징 결과 반환
     }
+
 
 }
 
