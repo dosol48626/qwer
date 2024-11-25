@@ -7,6 +7,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -14,7 +15,7 @@ import java.time.LocalDate;
 @Builder
 public class TodoDTO {
 
-    private Long todoNum; // Primary Key 이름 변경 (todoId → todoNum)
+    private Long todoNum;
 
     private String nickname;
 
@@ -27,4 +28,8 @@ public class TodoDTO {
     private Boolean complete; // 완료 여부
 
     private LocalDate dueDate; // 마감일
+
+    private LocalDateTime createTime; // 등록일
+
+    private LocalDateTime updateTime;
 }
