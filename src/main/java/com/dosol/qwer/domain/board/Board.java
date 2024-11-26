@@ -17,7 +17,7 @@ import java.util.Set;
 @Getter
 @Setter
 public class Board extends BaseEntity {
-
+//
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long boardNum;
